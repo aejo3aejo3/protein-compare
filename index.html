@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>台灣蛋白粉比價（排序版）</title>
+<style>
+/* ===== 原站樣式（protein-cp.pages.dev） ===== */
+:root {
+  --bg: #f6f5f1; --card: #ffffff; --text: #1d1d1b; --muted: #6b6a64; --line: #e3e1da;
+  --accent: #2f6f4f; --accent-soft: #e4f0e8; --chip: #efede7; --out: #a3a29c;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #151614; --card: #1f201d; --text: #ecebe6; --muted: #a09f98; --line: #33342f;
+    --accent: #7cc39a; --accent-soft: #23362b; --chip: #2a2b27; --out: #6c6b66;
+  }
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--text);
+  font: 15px/1.55 -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif; }
+a { color: inherit; }
+.wrap { max-width: 760px; margin: 0 auto; padding: 0 16px 48px; }
+.top { padding: 28px 0 12px; display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+.top h1 { margin: 0; font-size: 24px; letter-spacing: .02em; }
+.top p { margin: 4px 0 0; color: var(--muted); font-size: 14px; }
+.sticky { position: sticky; top: 0; z-index: 2; background: var(--bg); border-bottom: 1px solid var(--line); }
+.tabs { display: flex; gap: 6px; padding: 10px 0 8px; }
+.tabs button { flex: 1; padding: 9px 0; border: 1px solid var(--line); border-radius: 10px; background: var(--card);
+  color: var(--text); font: inherit; font-weight: 600; cursor: pointer; }
+.tabs button[aria-selected="true"] { background: var(--accent); border-color: var(--accent); color: var(--bg); }
+.secs { display: flex; gap: 6px; padding: 12px 0 2px; flex-wrap: wrap; }
+.secs a { padding: 4px 12px; border-radius: 99px; background: var(--chip); text-decoration: none; font-size: 13px; }
+.lead { margin: 14px 0 0; color: var(--muted); font-size: 13px; }
+section { scroll-margin-top: 150px; }
+h2 { font-size: 17px; margin: 22px 0 10px; display: flex; align-items: baseline; gap: 8px; }
+h2 small { color: var(--muted); font-weight: 400; font-size: 13px; }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 14px; margin-bottom: 10px; }
+.card header { display: flex; gap: 10px; align-items: flex-start; }
+.rank { flex: none; width: 26px; height: 26px; border-radius: 8px; background: var(--chip); display: grid; place-items: center;
+  font-size: 13px; font-weight: 700; color: var(--muted); }
+.name { flex: 1; min-width: 0; }
+.name h3 { margin: 0; font-size: 16px; line-height: 1.35; }
+.tag { font-size: 12px; font-weight: 500; padding: 1px 7px; border-radius: 99px; background: var(--chip); color: var(--muted); }
+.spec { margin: 2px 0 0; color: var(--muted); font-size: 12.5px; }
+.best-g { flex: none; text-align: right; }
+.best-g strong { display: block; font-size: 22px; line-height: 1.1; color: var(--accent); font-variant-numeric: tabular-nums; }
+.best-g small { font-size: 11px; color: var(--muted); }
+.best-g.out strong { color: var(--out); font-size: 16px; }
+.chans { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; margin-top: 12px; }
+@media (min-width: 600px) { .chans { grid-template-columns: repeat(4, 1fr); } }
+.ch { display: flex; flex-direction: column; padding: 7px 10px; border-radius: 10px; border: 1px solid var(--line);
+  text-decoration: none; font-variant-numeric: tabular-nums; }
+a.ch { cursor: pointer; user-select: none; -webkit-tap-highlight-color: transparent; transition: background-color .12s, transform .08s; }
+a.ch:hover { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+a.ch:active { transform: scale(.97); }
+.ch b { font-size: 12px; color: var(--muted); font-weight: 600; }
+.ch .p { font-size: 15px; font-weight: 600; }
+.ch .g { font-size: 12px; color: var(--muted); }
+.ch.best { background: var(--accent-soft); border-color: var(--accent); }
+.ch.best b { color: var(--accent); }
+.ch.so, .ch.na { opacity: .55; }
+.ch.ex { border-style: dashed; }
+.note { margin: 10px 0 0; font-size: 12.5px; color: var(--muted); white-space: pre-line; }
+footer { margin-top: 24px; font-size: 12.5px; color: var(--muted); }
+
+/* ===== 新增：搜尋／排序列 ===== */
+.tools { display: flex; gap: 6px; padding: 0 0 8px; }
+.tools input[type=search] { flex: 1; min-width: 0; padding: 8px 12px; border: 1px solid var(--line); border-radius: 10px;
+  background: var(--card); color: var(--text); font: inherit; font-size: 14px; }
+.tools select, .pill { padding: 8px 10px; border: 1px solid var(--line); border-radius: 10px; background: var(--card);
+  color: var(--text); font: inherit; font-size: 13px; cursor: pointer; }
+.pill[aria-expanded="true"], .pill.has { border-color: var(--accent); color: var(--accent); }
+.adv { display: none; background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 12px 14px; margin: 0 0 10px; }
+.adv.on { display: block; }
+.adv .row { display: flex; align-items: center; gap: 8px; padding: 6px 0; flex-wrap: wrap; }
+.adv .row > span { width: 92px; flex: none; color: var(--muted); font-size: 13px; }
+.adv input[type=number] { width: 84px; padding: 5px 8px; border: 1px solid var(--line); border-radius: 8px;
+  background: var(--bg); color: var(--text); font: inherit; font-size: 13px; font-variant-numeric: tabular-nums; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; flex: 1; }
+.chips label { padding: 3px 10px; border-radius: 99px; background: var(--chip); font-size: 13px; cursor: pointer; user-select: none; }
+.chips input { display: none; }
+.chips label:has(input:checked) { background: var(--accent); color: var(--bg); }
+.adv .foot { display: flex; justify-content: space-between; align-items: center; margin-top: 6px; font-size: 12.5px; color: var(--muted); }
+.adv .foot button { padding: 5px 12px; border: 1px solid var(--line); border-radius: 99px; background: none; color: var(--text); font: inherit; font-size: 13px; cursor: pointer; }
+.count { color: var(--muted); font-size: 13px; margin: 12px 0 0; }
+.empty { text-align: center; color: var(--muted); padding: 40px 0; }
+mark { background: var(--accent-soft); color: inherit; border-radius: 3px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="top">
+  <div><h1>台灣蛋白粉比價</h1><p id="status">載入中…</p></div>
+</div>
+
+<div class="sticky">
+  <div class="tabs" role="tablist">
+    <button role="tab" data-p="">全部</button>
+    <button role="tab" data-p="flavor">調味</button>
+    <button role="tab" data-p="plain">原味</button>
+    <button role="tab" data-p="costco">好市多</button>
+    <button role="tab" data-p="creatine">肌酸</button>
+  </div>
+  <div class="tools">
+    <input type="search" id="q" placeholder="搜尋品牌、口味、備註；-字 排除">
+    <select id="sort" aria-label="排序">
+      <option value="bestG:1">每克價 低→高</option>
+      <option value="bestG:-1">每克價 高→低</option>
+      <option value="bestPrice:1">價格 低→高</option>
+      <option value="bestPrice:-1">價格 高→低</option>
+      <option value="pct:-1">蛋白含量 高→低</option>
+      <option value="weight:-1">容量 大→小</option>
+      <option value="brand:1">品牌 A→Z</option>
+    </select>
+    <button class="pill" id="advBtn" type="button" aria-expanded="false">篩選</button>
+  </div>
+</div>
+
+<div class="adv" id="adv">
+  <div class="row"><span>每克價</span><input type="number" id="gMin" step="0.1" placeholder="最低"> ～ <input type="number" id="gMax" step="0.1" placeholder="最高"> 元</div>
+  <div class="row"><span>價格</span><input type="number" id="pMin" step="100" placeholder="最低"> ～ <input type="number" id="pMax" step="100" placeholder="最高"> 元</div>
+  <div class="row"><span>容量</span><input type="number" id="wMin" step="100" placeholder="最低"> ～ <input type="number" id="wMax" step="100" placeholder="最高"> g</div>
+  <div class="row"><span>含量至少</span><input type="number" id="pctMin" step="5" placeholder="例 80"> %</div>
+  <div class="row"><span>類別</span><div class="chips" id="fSec"></div></div>
+  <div class="row"><span>口味</span><div class="chips" id="fKind"></div></div>
+  <div class="row"><span>品牌</span><div class="chips" id="fBrand"></div></div>
+  <div class="row"><span>計入最低價</span><div class="chips" id="fCh"></div></div>
+  <div class="row"><span>必須有貨</span><div class="chips" id="fMust"></div></div>
+  <div class="row"><span>其他</span><div class="chips"><label><input type="checkbox" id="hideOut" checked>隱藏全部售完</label><label><input type="checkbox" id="flat">不分類別</label></div></div>
+  <div class="foot"><span>沒勾＝不限；「計入最低價」預設跟原站一樣不算酷澎</span><button type="button" id="reset">清除篩選</button></div>
+</div>
+
+<p class="count" id="count"></p>
+<div id="list"></div>
+<footer>資料即時抓自 <a href="https://protein-cp.pages.dev/" target="_blank" rel="noopener">protein-cp.pages.dev</a>，價格以賣場頁面為準。</footer>
+</div>
+
+<script>
+const SRC = 'https://protein-cp.pages.dev/';
+const TABS = { flavor: '調味', plain: '原味', costco: '好市多', creatine: '肌酸' };
+const CHANNELS = ['官網', 'momo', '蝦皮', '酷澎', '好市多'];
+const DEFAULT_CH = ['官網', 'momo', '蝦皮', '好市多'];
+const KNOWN = ['Red Cow 聰勁', 'Body Goals', 'Creative Power', 'MedBIO 美百優', 'Notorious 惡名昭彰', 'Tapioca B.',
+  'THE VEGAN 樂維根', 'Vilson 米森', '明治 SAVAS', '義美生醫', 'GOAL DAILY', 'Spark Protein', 'Wedar 薇達'];
+const brandBaseOf = b => (KNOWN.find(k => b.startsWith(k)) || b.split(/[\s（(]/)[0]).replace(/^Tapioca B\.$/, 'Tapioca B. 粉圓臀');
+const $ = s => document.querySelector(s);
+const txt = (el, s) => el.querySelector(s)?.textContent.trim() ?? '';
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+let rows = [], tab = '';
+
+async function load() {
+  const html = await (await fetch(SRC, { cache: 'no-store' })).text();
+  const doc = new DOMParser().parseFromString(html, 'text/html');
+  doc.querySelectorAll('.panel').forEach(panel => {
+    const t = panel.id.slice(2);
+    panel.querySelectorAll('section').forEach(sec => {
+      const section = sec.querySelector('h2').firstChild.textContent.trim();
+      sec.querySelectorAll('article.card').forEach(card => {
+        const h3 = card.querySelector('h3');
+        const flavor = txt(h3, '.tag'), name = h3.firstChild.textContent.trim();
+        const spec = txt(card, '.spec');
+        const m = spec.match(/([\d.]+)g · 每份 ([\d.]+)g 含(\S+?) ([\d.]+)g/);
+        if (!m) return;
+        const [weight, serving] = [+m[1], +m[2]], unit = m[3], per = +m[4];
+        const total = Math.round(weight * per / serving);
+        const chans = [...card.querySelectorAll('.chans .ch')].map(a => {
+          const p = txt(a, '.p').replace(/[$,]/g, '');
+          const price = /^\d+$/.test(p) ? +p : null;
+          return { name: txt(a, 'b'), price, perG: price ? price / total : null, url: a.getAttribute('href'),
+                   so: a.classList.contains('so') || a.classList.contains('na'), raw: txt(a, '.g') || txt(a, 'span') };
+        }).filter(c => c.name);
+        const kind = t === 'plain' || /原味/.test(section + flavor) ? 'plain' : 'flavor';
+        const noteEl = card.querySelector('.note');
+        const note = noteEl ? noteEl.innerHTML.replace(/<br\s*\/?>/g, '\n').replace(/<[^>]+>/g, '').trim() : '';
+        rows.push({ tab: t, section, name, flavor, kind, brandBase: brandBaseOf(name), weight, unit,
+                    pct: Math.round(per / serving * 100), total, spec, chans, note, brand: name });
+      });
+    });
+  });
+  const upd = doc.querySelector('.top p')?.textContent.match(/\d{4}-\d{2}-\d{2}/)?.[0];
+  $('#status').textContent = `蛋白粉＋肌酸 ${rows.length} 款・${upd ? upd + ' 更新' : ''}・可排序搜尋`;
+
+  const chips = (id, values, type, checked = []) => $(id).innerHTML = values.map(([v, l]) =>
+    `<label><input type="${type}" value="${esc(v)}" ${checked.includes(v) ? 'checked' : ''}>${esc(l)}</label>`).join('');
+  chips('#fSec', [...new Set(rows.map(r => r.section))].map(s => [s, s]), 'checkbox');
+  chips('#fKind', [['flavor', '調味'], ['plain', '原味']], 'checkbox');
+  chips('#fBrand', [...new Set(rows.map(r => r.brandBase))].sort((a, b) => a.localeCompare(b, 'zh-Hant')).map(b => [b, b]), 'checkbox');
+  chips('#fCh', CHANNELS.map(c => [c, c]), 'checkbox', DEFAULT_CH);
+  chips('#fMust', CHANNELS.map(c => [c, c]), 'checkbox');
+
+  document.querySelectorAll('.tabs button').forEach(b => b.addEventListener('click', () => { tab = b.dataset.p; render(); scrollTo(0, 0); }));
+  $('#advBtn').addEventListener('click', () => {
+    const on = $('#adv').classList.toggle('on'); $('#advBtn').setAttribute('aria-expanded', on);
+  });
+  $('#reset').addEventListener('click', () => {
+    document.querySelectorAll('#adv input[type=number]').forEach(i => i.value = '');
+    document.querySelectorAll('#adv .chips input').forEach(i => i.checked = i.closest('#fCh') ? DEFAULT_CH.includes(i.value) : i.id === 'hideOut');
+    render();
+  });
+  document.addEventListener('input', e => { if (e.target.closest('.tools, #adv')) render(); });
+  render();
+}
+
+const vals = id => [...document.querySelectorAll(id + ' input:checked')].map(i => i.value);
+const num = id => { const v = $('#' + id).value; return v === '' ? null : +v; };
+const inR = (v, lo, hi) => (lo == null || (v != null && v >= lo)) && (hi == null || (v != null && v <= hi));
+const fmtG = v => v.toFixed(2);
+
+function render() {
+  document.querySelectorAll('.tabs button').forEach(b => b.setAttribute('aria-selected', b.dataset.p === tab));
+  const words = $('#q').value.trim().toLowerCase().split(/\s+/).filter(Boolean);
+  const terms = words.filter(w => !w.startsWith('-')), nots = words.filter(w => w.startsWith('-') && w.length > 1).map(w => w.slice(1));
+  const [gMin, gMax, pMin, pMax, wMin, wMax, pctMin] = ['gMin', 'gMax', 'pMin', 'pMax', 'wMin', 'wMax', 'pctMin'].map(num);
+  const secs = vals('#fSec'), kinds = vals('#fKind'), brands = vals('#fBrand'), must = vals('#fMust');
+  const on = new Set(vals('#fCh')), hideOut = $('#hideOut').checked, flat = $('#flat').checked;
+  const [sk, sd] = $('#sort').value.split(':'); const dir = +sd;
+
+  const advActive = [gMin, gMax, pMin, pMax, wMin, wMax, pctMin].some(v => v != null) || secs.length || kinds.length
+    || brands.length || must.length || !hideOut || flat || vals('#fCh').join() !== DEFAULT_CH.join();
+  $('#advBtn').classList.toggle('has', !!advActive);
+  $('#advBtn').textContent = advActive ? '篩選 ●' : '篩選';
+
+  const list = rows.map(r => {
+    const ok = r.chans.filter(c => on.has(c.name) && c.perG != null && !c.so);
+    const min = ok.length ? Math.min(...ok.map(c => c.perG)) : null;
+    const bestSet = ok.filter(c => Math.abs(c.perG - min) < 0.005);
+    return { ...r, bestG: min, bestPrice: bestSet.length ? Math.min(...bestSet.map(c => c.price)) : null, bestSet };
+  }).filter(r => {
+    if (tab && r.tab !== tab) return false;
+    if (hideOut && r.bestG == null) return false;
+    if (!inR(r.bestG, gMin, gMax) || !inR(r.bestPrice, pMin, pMax) || !inR(r.weight, wMin, wMax) || !inR(r.pct, pctMin, null)) return false;
+    if (secs.length && !secs.includes(r.section)) return false;
+    if (kinds.length && !kinds.includes(r.kind)) return false;
+    if (brands.length && !brands.includes(r.brandBase)) return false;
+    if (must.length && !must.every(m => r.chans.some(c => c.name === m && c.price != null && !c.so))) return false;
+    const hay = `${r.name} ${r.flavor} ${r.section} ${TABS[r.tab]} ${r.note} ${r.spec}`.toLowerCase();
+    return terms.every(t => hay.includes(t)) && !nots.some(t => hay.includes(t));
+  }).sort((a, b) => {
+    const x = a[sk], y = b[sk];
+    if (x == null) return 1; if (y == null) return -1;
+    return (typeof x === 'number' ? x - y : String(x).localeCompare(String(y), 'zh-Hant')) * dir;
+  });
+
+  // 分組：全部分頁時以「分頁・類別」分組；勾「不分類別」就攤平
+  const keyOf = r => flat ? '搜尋結果' : (tab ? r.section : `${TABS[r.tab]}・${r.section}`);
+  const groups = new Map(rows.map(r => [keyOf(r), []]));  // 固定照原站順序
+  list.forEach(r => groups.get(keyOf(r)).push(r));
+  [...groups].forEach(([k, v]) => { if (!v.length) groups.delete(k); });
+  const hl = s => { let h = esc(s); terms.forEach(t => { h = h.replace(new RegExp(t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi'), m => `<mark>${m}</mark>`); }); return h; };
+  const lead = tab === 'costco' ? '<p class="lead">好市多官網線上價：需要會員，賣場價格可能不同。規格多為 2–2.5kg，跟主表分開排名。</p>' : '';
+  const nav = groups.size > 1 ? `<nav class="secs">${[...groups.keys()].map((k, i) => `<a href="#g-${i}">${esc(k)}</a>`).join('')}</nav>` : '';
+
+  $('#count').textContent = `顯示 ${list.length} / ${rows.length} 款`;
+  $('#list').innerHTML = !list.length ? '<p class="empty">沒有符合條件的商品</p>' : lead + nav + [...groups].map(([k, items], gi) => `
+    <section id="g-${gi}"><h2>${esc(k)}<small>${items.length} 款</small></h2>
+    ${items.map((r, i) => `<article class="card"><header><span class="rank">${i + 1}</span>
+      <div class="name"><h3>${hl(r.name)}${(r.flavor || (!tab && r.tab !== 'creatine')) ? ` <span class="tag">${r.flavor || TABS[r.tab]}</span>` : ''}</h3>
+      <p class="spec">${hl(r.spec)}</p></div>
+      <div class="best-g${r.bestG == null ? ' out' : ''}"><strong>${r.bestG == null ? '售完' : fmtG(r.bestG)}</strong><small>元/g ${r.unit}</small></div></header>
+      <div class="chans">${r.chans.map(c => {
+        const cls = ['ch', r.bestSet.includes(c) && 'best', c.so && 'so', !on.has(c.name) && 'ex'].filter(Boolean).join(' ');
+        const g = c.price == null ? esc(c.raw) : `${fmtG(c.perG)} 元/g${c.so ? '・售完' : ''}`;
+        return c.url
+          ? `<a class="${cls}" href="${esc(c.url)}" target="_blank" rel="noopener"><b>${c.name}</b><span class="p">${c.price != null ? '$' + c.price.toLocaleString() : ''}</span><span class="g">${g}</span></a>`
+          : `<div class="${cls} na"><b>${c.name}</b><span>${g || '不販售'}</span></div>`;
+      }).join('')}</div>
+      ${r.note ? `<p class="note">${hl(r.note)}</p>` : ''}</article>`).join('')}
+    </section>`).join('');
+}
+
+load().catch(e => { $('#status').textContent = '載入失敗：' + e.message; });
+</script>
+</body>
+</html>
